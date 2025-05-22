@@ -2,6 +2,11 @@
 
 LearnHub adalah platform pembelajaran modern yang dibangun menggunakan Flask, mengikuti pola MVC (Model-View-Controller). Platform ini menyediakan pengalaman belajar yang mirip dengan Khan Academy dengan fokus pada pengalaman pengguna dan desain modern.
 
+## 🌐 Link Penting
+
+- **Website**: [LearnHub](http://seiryu.pythonanywhere.com)
+- **Repository**: [GitHub LearnHub](https://github.com/NelsenJ/Moodle-LearnHUB)
+
 ## 🌟 Fitur Utama
 
 ### Untuk Siswa
@@ -27,18 +32,29 @@ LearnHub adalah platform pembelajaran modern yang dibangun menggunakan Flask, me
   - Bootstrap 5 (Framework CSS)
   - AOS (Animate On Scroll library)
   - Font Awesome (Ikon)
-- **Deployment**: Heroku
+- **Deployment**: PythonAnywhere
 
 ## 🚀 Cara Menggunakan Website
 
 Website ini sudah di-deploy dan dapat diakses melalui:
-- URL: [Masukkan URL website yang sudah di-deploy]
+- URL: [http://seiryu.pythonanywhere.com](http://seiryu.pythonanywhere.com)
 
 ### Cara Mengakses Website
 1. Buka browser (Chrome, Firefox, Safari, dll)
-2. Masukkan URL website di address bar
+2. Kunjungi [http://seiryu.pythonanywhere.com](http://seiryu.pythonanywhere.com)
 3. Anda dapat langsung menjelajahi kursus yang tersedia
 4. Untuk mengakses fitur lengkap, silakan daftar atau login
+
+### Akun Demo
+Untuk mencoba fitur-fitur website, Anda dapat menggunakan akun demo berikut:
+
+**Siswa:**
+- Email: student@example.com
+- Password: password123
+
+**Pengajar:**
+- Email: teacher@example.com
+- Password: password123
 
 ## 💻 Cara Mengembangkan Website Ini
 
@@ -52,8 +68,8 @@ Website ini sudah di-deploy dan dapat diakses melalui:
 
 1. **Clone Repository**
 ```bash
-git clone <repository-url>
-cd learnhub
+git clone https://github.com/NelsenJ/Moodle-LearnHUB.git
+cd Moodle-LearnHUB
 ```
 
 2. **Buat dan Aktifkan Virtual Environment**
@@ -82,9 +98,8 @@ SECRET_KEY=your-secret-key-here
 
 5. **Inisialisasi Database**
 ```bash
-flask db init
-flask db migrate
 flask db upgrade
+python seed.py
 ```
 
 6. **Jalankan Aplikasi**
@@ -137,9 +152,9 @@ Proyek ini dilisensikan di bawah MIT License - lihat file LICENSE untuk detail l
 ## 📞 Kontak & Dukungan
 
 Jika Anda memiliki pertanyaan atau membutuhkan bantuan, silakan:
-- Buat issue di repository ini
-- Hubungi tim pengembang melalui [masukkan kontak]
+- Buat issue di [GitHub repository](https://github.com/NelsenJ/Moodle-LearnHUB/issues)
+- Hubungi pengembang melalui [GitHub profile](https://github.com/NelsenJ)
 
 ---
 
-Dibuat dengan ❤️ oleh Tim Pengembang LearnHub 
+Dibuat dengan ❤️ oleh [NelsenJ](https://github.com/NelsenJ) 
