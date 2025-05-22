@@ -1,160 +1,101 @@
-# LearnHub - Platform Pembelajaran Modern
+## 📘 LearnHub – A Modern Learning Platform
 
-LearnHub adalah platform pembelajaran modern yang dibangun menggunakan Flask, mengikuti pola MVC (Model-View-Controller). Platform ini menyediakan pengalaman belajar yang mirip dengan Khan Academy dengan fokus pada pengalaman pengguna dan desain modern.
+**LearnHub** is a modern web-based learning platform built with **Flask** using the **MVC (Model-View-Controller)** architecture. Inspired by **Khan Academy**, it focuses on user experience and a clean, responsive design to support students, teachers, and administrators.
 
-## 🌐 Link Penting
+## 🌐 Live Demo & Repository
 
-- **Website**: [LearnHub](http://seiryu.pythonanywhere.com)
-- **Repository**: [GitHub LearnHub](https://github.com/NelsenJ/Moodle-LearnHUB)
+* **Live Site**: [http://seiryu.pythonanywhere.com](http://seiryu.pythonanywhere.com)
+* **Source Code**: [GitHub Repository](https://github.com/NelsenJ/Moodle-LearnHUB)
 
-## 🌟 Fitur Utama
+## 🌟 Key Features
 
-### Untuk Siswa
-- Antarmuka yang indah dan responsif dengan animasi modern
-- Sistem autentikasi (login/register) yang aman
-- Pencarian dan filter kursus yang mudah digunakan
-- Sistem pendaftaran kursus
-- Pelacakan kemajuan belajar
-- Dashboard modern untuk memantau pembelajaran
-- Riwayat pembelajaran yang terorganisir
+### For Students
 
-### Untuk Pengajar
-- Dashboard khusus pengajar
-- Manajemen kursus yang mudah
-- Statistik dan analitik pembelajaran
-- Sistem penilaian terintegrasi
+* Beautiful, responsive UI with animations
+* Secure login and registration
+* Browse and enroll in courses
+* Track learning progress and history
+* Personalized dashboard
 
-## 🛠️ Teknologi yang Digunakan
+### For Teachers
 
-- **Backend**: Flask (Framework Python)
-- **Database**: SQLite/MySQL
-- **Frontend**: 
-  - Bootstrap 5 (Framework CSS)
-  - AOS (Animate On Scroll library)
-  - Font Awesome (Ikon)
-- **Deployment**: PythonAnywhere
+* Teacher-specific dashboard
+* Course and content management
+* Learning analytics and progress tracking
+* Integrated grading system
 
-## 🚀 Cara Menggunakan Website
+### For Admins
 
-Website ini sudah di-deploy dan dapat diakses melalui:
-- URL: [http://seiryu.pythonanywhere.com](http://seiryu.pythonanywhere.com)
+* Full access to manage users and content
+* Control panel for platform management
 
-### Cara Mengakses Website
-1. Buka browser (Chrome, Firefox, Safari, dll)
-2. Kunjungi [http://seiryu.pythonanywhere.com](http://seiryu.pythonanywhere.com)
-3. Anda dapat langsung menjelajahi kursus yang tersedia
-4. Untuk mengakses fitur lengkap, silakan daftar atau login
+## 🛠️ Tech Stack
 
-### Akun Demo
-Untuk mencoba fitur-fitur website, Anda dapat menggunakan akun demo berikut:
+* **Backend**: Flask (Python)
+* **Database**: SQLite / MySQL
+* **Frontend**:
 
-**Siswa:**
-- Email: student@example.com
-- Password: password123
+  * Bootstrap 5
+  * AOS (Animate on Scroll)
+  * Font Awesome
+* **Deployment**: PythonAnywhere
 
-**Pengajar:**
-- Email: teacher@example.com
-- Password: password123
+## 🚀 Getting Started Locally
 
-## 💻 Cara Mengembangkan Website Ini
+### Prerequisites
 
-### Prasyarat
-- Python 3.8 atau lebih baru
-- Git
-- pip (Python package manager)
-- Virtual environment (venv)
+* Python 3.8+
+* Git
+* pip
+* Virtual environment (venv)
 
-### Langkah-langkah Pengembangan
+### Steps
 
-1. **Clone Repository**
+1. **Clone the repository**
+
 ```bash
 git clone https://github.com/NelsenJ/Moodle-LearnHUB.git
 cd Moodle-LearnHUB
 ```
 
-2. **Buat dan Aktifkan Virtual Environment**
+2. **Create and activate a virtual environment**
+
 ```bash
-# Untuk Windows
+# Windows
 python -m venv venv
 venv\Scripts\activate
 
-# Untuk Linux/Mac
+# Linux/Mac
 python -m venv venv
 source venv/bin/activate
 ```
 
-3. **Install Dependencies**
+3. **Install dependencies**
+
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Konfigurasi Environment**
-Buat file `.env` di direktori utama dengan isi:
+4. **Create a `.env` file** in the root directory:
+
 ```
 FLASK_APP=run.py
 FLASK_ENV=development
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=your-secret-key
 ```
 
-5. **Inisialisasi Database**
+5. **Initialize the database and run the app**
+
 ```bash
 flask db upgrade
 python seed.py
-```
-
-6. **Jalankan Aplikasi**
-```bash
 python run.py
 ```
-Aplikasi akan berjalan di `http://localhost:5000`
 
-## 📁 Struktur Proyek
+The app will be available at `http://localhost:5000`
 
-```
-learnhub/
-├── app/                    # Direktori utama aplikasi
-│   ├── __init__.py        # Inisialisasi aplikasi Flask
-│   ├── models.py          # Model database
-│   ├── auth/              # Modul autentikasi
-│   │   ├── __init__.py
-│   │   ├── forms.py      # Form autentikasi
-│   │   └── routes.py     # Route autentikasi
-│   ├── main/             # Modul utama
-│   │   ├── __init__.py
-│   │   └── routes.py     # Route utama
-│   ├── courses/          # Modul kursus
-│   │   ├── __init__.py
-│   │   └── routes.py     # Route kursus
-│   └── templates/        # Template HTML
-│       ├── base.html     # Template dasar
-│       ├── index.html    # Halaman utama
-│       ├── explore.html  # Halaman eksplorasi
-│       └── auth/         # Template autentikasi
-├── config.py             # Konfigurasi aplikasi
-├── requirements.txt      # Daftar dependensi
-└── run.py               # File untuk menjalankan aplikasi
-```
+## 📝 License
 
-## 🤝 Berkontribusi
+This project is licensed under the MIT License – see the LICENSE file for details.
 
-Kami sangat menerima kontribusi dari siapa saja! Berikut cara berkontribusi:
 
-1. Fork repository ini
-2. Buat branch baru (`git checkout -b fitur-baru`)
-3. Commit perubahan Anda (`git commit -m 'Menambahkan fitur baru'`)
-4. Push ke branch (`git push origin fitur-baru`)
-5. Buat Pull Request
-
-## 📝 Lisensi
-
-Proyek ini dilisensikan di bawah MIT License - lihat file LICENSE untuk detail lebih lanjut.
-
-## 📞 Kontak & Dukungan
-
-Jika Anda memiliki pertanyaan atau membutuhkan bantuan, silakan:
-- Buat issue di [GitHub repository](https://github.com/NelsenJ/Moodle-LearnHUB/issues)
-- Hubungi pengembang melalui [GitHub profile](https://github.com/NelsenJ)
-
----
-
-Dibuat dengan ❤️ oleh [NelsenJ](https://github.com/NelsenJ) 
