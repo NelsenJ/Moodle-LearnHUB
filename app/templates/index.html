@@ -188,25 +188,59 @@
 </section>
 
 <style>
+/* Remove the overflow-x hidden from html and body */
 html, body {
-    overflow-x: hidden;
+    height: 100%;
 }
 
 .hero-section-full {
-    width: 100vw;
+    width: 100%;
     position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
     background: linear-gradient(135deg, #0f2027 0%, #2c5364 50%, #14505c 100%);
     padding: 5rem 0;
     margin-bottom: 2rem;
-    overflow-x: hidden;
+    /* Remove overflow-x hidden */
 }
 
+/* Add container styles to ensure proper width */
+.container {
+    max-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Ensure AOS animations work properly */
+[data-aos] {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: transform 0.5s ease, opacity 0.5s ease !important;
+}
+
+[data-aos="fade-up"] {
+    transform: translateY(20px) !important;
+    opacity: 0 !important;
+}
+
+[data-aos="fade-right"] {
+    transform: translateX(-20px) !important;
+    opacity: 0 !important;
+}
+
+[data-aos="fade-left"] {
+    transform: translateX(20px) !important;
+    opacity: 0 !important;
+}
+
+[data-aos].aos-animate {
+    transform: translate(0) !important;
+    opacity: 1 !important;
+}
+
+/* Rest of your existing styles */
 .hero-bg {
-    display: none; /* Remove the absolute positioned background */
+    display: none;
 }
 
 .hero-section .container {

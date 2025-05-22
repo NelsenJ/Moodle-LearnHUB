@@ -26,14 +26,22 @@
 
         html, body {
             height: 100%;
+            overflow-x: visible;
         }
         body {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            position: relative;
+            width: 100%;
         }
         main.container {
             flex: 1 0 auto;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 15px;
+            padding-right: 15px;
+            overflow: visible;
         }
         .footer {
             background-color: var(--secondary-color);
@@ -90,6 +98,9 @@
             border-radius: 15px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-bottom: 20px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .card:hover {
@@ -127,6 +138,12 @@
         .page-item.active .page-link {
             background-color: var(--primary-dark) !important;
             border-color: var(--primary-dark) !important;
+        }
+
+        .courses-section, .timeline-section {
+            width: 100%;
+            overflow: visible;
+            position: relative;
         }
     </style>
 </head>
