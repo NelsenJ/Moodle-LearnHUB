@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('teacher.dashboard') }}">Teacher Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('course.view', course_id=course.id) }}">{{ course.title }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('course.manage_course', course_id=course.id) }}">Manage Course</a></li>
+                    <li class="breadcrumb-item active">Manage Lesson</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Manage Lesson: {{ lesson.title }}</h1>
+                <div>
+                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editLessonModal">
+                        <i class="fas fa-edit me-2"></i>Edit Lesson
+                    </button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#manageQuizModal">
+                        <i class="fas fa-question-circle me-2"></i>Manage Quiz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lesson Details -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Lesson Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>{{ lesson.title }}</h4>
+                            <p class="text-muted">
+                                <i class="fas fa-clock me-2"></i>{{ lesson.duration }} minutes
+                                <i class="fas fa-sort-numeric-up ms-3 me-2"></i>Order: {{ lesson.order }}
+                            </p>
+                            <div class="lesson-content mt-4">
+                                {{ lesson.content|safe }}
+                            </div>
+                            {% if lesson.video_url %}
+                            <div class="mt-4">
+                                <h5>Video Content</h5>
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="{{ lesson.video_url }}" 
+                                            title="{{ lesson.title }}" 
+                                            allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-white">
+                                    <h5 class="mb-0">Quiz Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    {% if lesson.quizzes.first() %}
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span>Quiz Title:</span>
+                                            <strong>{{ lesson.quizzes.first().title }}</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span>Questions:</span>
+                                            <strong>{{ lesson.quizzes.first().questions.count() }}</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span>Passing Score:</span>
+                                            <strong>{{ lesson.quizzes.first().passing_score }}%</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Total Attempts:</span>
+                                            <strong>{{ lesson.quizzes.first().attempts.count() }}</strong>
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-info mb-0">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            No quiz has been created for this lesson yet.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Lesson Modal -->
+<div class="modal fade" id="editLessonModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Lesson</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editLessonForm" method="POST" action="{{ url_for('course.manage_lesson', course_id=course.id, lesson_id=lesson.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="edit_lesson">
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" name="title" value="{{ lesson.title }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Content</label>
+                        <textarea class="form-control" name="content" rows="6" required>{{ lesson.content }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Video URL (optional)</label>
+                        <input type="url" class="form-control" name="video_url" value="{{ lesson.video_url or '' }}">
+                        <small class="text-muted">Enter a valid video URL (YouTube, Vimeo, etc.)</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Order</label>
+                            <input type="number" class="form-control" name="order" value="{{ lesson.order }}" min="1" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Duration (minutes)</label>
+                            <input type="number" class="form-control" name="duration" value="{{ lesson.duration }}" min="1" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="editLessonForm" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manage Quiz Modal -->
+<div class="modal fade" id="manageQuizModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Quiz</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="quizForm" method="POST" action="{{ url_for('course.manage_lesson', course_id=course.id, lesson_id=lesson.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="manage_quiz">
+                    <input type="hidden" name="quiz_action" value="edit">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Quiz Title</label>
+                        <input type="text" class="form-control" name="quiz_title" 
+                               value="{{ lesson.quizzes.first().title if lesson.quizzes.first() else 'Quiz' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="quiz_description" rows="2">{{ lesson.quizzes.first().description if lesson.quizzes.first() else '' }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Passing Score (%)</label>
+                        <input type="number" class="form-control" name="passing_score" 
+                               value="{{ lesson.quizzes.first().passing_score if lesson.quizzes.first() else 70 }}" 
+                               min="0" max="100" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Questions</h6>
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addQuestion()">
+                                <i class="fas fa-plus me-1"></i>Add Question
+                            </button>
+                        </div>
+                        <div id="questionsContainer">
+                            {% if lesson.quizzes.first() and lesson.quizzes.first().questions.count() > 0 %}
+                                {% for question in lesson.quizzes.first().questions %}
+                                <div class="card mb-3 question-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <h6 class="mb-0">Question {{ loop.index }}</h6>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" name="questions[]" 
+                                                   value="{{ question.question_text }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Options</label>
+                                            {% for option in question.options %}
+                                            <div class="input-group mb-2">
+                                                <input type="text" class="form-control" 
+                                                       name="options_{{ loop.parent.loop.index0 }}[]" 
+                                                       value="{{ option }}" required>
+                                                <div class="input-group-text">
+                                                    <input type="radio" name="correct_{{ loop.parent.loop.index0 }}" 
+                                                           value="{{ option }}" 
+                                                           {% if option == question.correct_answer %}checked{% endif %}>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                                    onclick="addOption(this)">
+                                                <i class="fas fa-plus me-1"></i>Add Option
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No questions added yet. Click "Add Question" to create your first question.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="quizForm" class="btn btn-primary" onclick="return validateQuizForm()">Save Quiz</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function addQuestion() {
+    const container = document.getElementById('questionsContainer');
+    const questionCount = container.getElementsByClassName('question-card').length + 1;
+    const questionId = Date.now(); // Unique ID for the question
+    
+    const questionHtml = `
+        <div class="card mb-3 question-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h6 class="mb-0">Question ${questionCount}</h6>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="questions[]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Options</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="options_${questionId}[]" required>
+                        <div class="input-group-text">
+                            <input type="radio" name="correct_${questionId}" value="" required>
+                        </div>
+                    </div>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="options_${questionId}[]" required>
+                        <div class="input-group-text">
+                            <input type="radio" name="correct_${questionId}" value="">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addOption(this)">
+                        <i class="fas fa-plus me-1"></i>Add Option
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove the "no questions" alert if it exists
+    const alert = container.querySelector('.alert-info');
+    if (alert) {
+        alert.remove();
+    }
+    
+    container.insertAdjacentHTML('beforeend', questionHtml);
+}
+
+function removeQuestion(button) {
+    const questionCard = button.closest('.question-card');
+    questionCard.remove();
+    
+    // Update question numbers
+    const questions = document.getElementsByClassName('question-card');
+    if (questions.length === 0) {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = `
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                No questions added yet. Click "Add Question" to create your first question.
+            </div>
+        `;
+    } else {
+        Array.from(questions).forEach((card, index) => {
+            card.querySelector('h6').textContent = `Question ${index + 1}`;
+        });
+    }
+}
+
+function addOption(button) {
+    const optionsContainer = button.previousElementSibling.parentElement;
+    const questionId = optionsContainer.querySelector('input[type="text"]').name.split('_')[1];
+    
+    const optionHtml = `
+        <div class="input-group mb-2">
+            <input type="text" class="form-control" name="options_${questionId}[]" required>
+            <div class="input-group-text">
+                <input type="radio" name="correct_${questionId}" value="">
+            </div>
+        </div>
+    `;
+    
+    optionsContainer.insertAdjacentHTML('beforeend', optionHtml);
+}
+
+// Update radio button values when option text changes
+document.addEventListener('input', function(e) {
+    if (e.target.matches('input[name^="options_"]')) {
+        const radio = e.target.parentElement.querySelector('input[type="radio"]');
+        radio.value = e.target.value;
+    }
+});
+
+function validateQuizForm() {
+    const form = document.getElementById('quizForm');
+    const questions = form.querySelectorAll('.question-card');
+    
+    if (questions.length === 0) {
+        alert('Please add at least one question to the quiz.');
+        return false;
+    }
+    
+    for (const question of questions) {
+        const questionText = question.querySelector('input[name="questions[]"]').value.trim();
+        if (!questionText) {
+            alert('Please fill in all question texts.');
+            return false;
+        }
+        
+        const options = question.querySelectorAll('input[name^="options_"]');
+        let hasOption = false;
+        let hasCorrect = false;
+        
+        for (const option of options) {
+            if (option.value.trim()) {
+                hasOption = true;
+                if (option.nextElementSibling.querySelector('input[type="radio"]').checked) {
+                    hasCorrect = true;
+                }
+            }
+        }
+        
+        if (!hasOption) {
+            alert('Each question must have at least one option.');
+            return false;
+        }
+        
+        if (!hasCorrect) {
+            alert('Each question must have a correct answer selected.');
+            return false;
+        }
+    }
+    
+    return true;
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h3 class="mb-0">Pembahasan Quiz: {{ quiz.title }}</h3>
+                    <p class="text-muted mb-0">Lesson: {{ lesson.title }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <strong>Skor Anda:</strong> {{ '%.1f'|format(attempt.score) }}%<br>
+                        <strong>Status:</strong> {% if attempt.passed %}<span class="text-success">Lulus</span>{% else %}<span class="text-danger">Tidak Lulus</span>{% endif %}
+                    </div>
+                    <hr>
+                    {% for item in review_data %}
+                        <div class="mb-4">
+                            <h5>Pertanyaan {{ loop.index }}:</h5>
+                            <p>{{ item.question.question_text }}</p>
+                            <ul class="list-group">
+                                <li class="list-group-item {% if item.user_answer == item.correct_answer %}list-group-item-success{% else %}list-group-item-danger{% endif %}">
+                                    <strong>Jawaban Anda:</strong>
+                                    {% if item.user_answer is not none %}
+                                        {{ item.user_answer }}
+                                        {% if item.user_answer == item.correct_answer %}
+                                            <span class="badge bg-success ms-2"><i class="fas fa-check"></i> Benar</span>
+                                        {% else %}
+                                            <span class="badge bg-danger ms-2"><i class="fas fa-times"></i> Salah</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="text-muted">Belum dijawab</span>
+                                    {% endif %}
+                                </li>
+                                <li class="list-group-item list-group-item-info">
+                                    <strong>Jawaban Benar:</strong> {{ item.correct_answer }}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endfor %}
+                    <a href="{{ url_for('course.view_lesson', course_id=course.id, lesson_id=lesson.id) }}" class="btn btn-primary">Kembali ke Lesson</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

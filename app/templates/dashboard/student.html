@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h2 class="card-title">Welcome back, {{ current_user.name }}!</h2>
+                    <p class="card-text">Continue your learning journey from where you left off.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Enrolled Courses -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Your Courses</h5>
+                    <a href="{{ url_for('main.explore') }}" class="btn btn-sm btn-outline-primary">Browse More</a>
+                </div>
+                <div class="card-body">
+                    {% if enrollments %}
+                        <div class="row">
+                            {% for enrollment in enrollments %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    {# <img src="{{ enrollment.course.thumbnail_url }}" class="card-img-top" alt="{{ enrollment.course.title }}"> #}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ enrollment.course.title }}</h5>
+                                        <p class="card-text text-muted">{{ enrollment.course.description[:100] }}...</p>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar" role="progressbar" style="width: {{ enrollment.progress }}%"
+                                                aria-valuenow="{{ enrollment.progress }}" aria-valuemin="0" aria-valuemax="100">
+                                                {{ enrollment.progress }}%
+                                            </div>
+                                        </div>
+                                        <a href="{{ url_for('course.view', course_id=enrollment.course.id) }}" 
+                                           class="btn btn-primary">Continue Learning</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-muted">You haven't enrolled in any courses yet.</p>
+                            <a href="{{ url_for('main.explore') }}" class="btn btn-primary">Find Courses</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_activity %}
+                        <div class="list-group">
+                            {% for activity in recent_activity %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ activity.course.title }}</h6>
+                                    <small>{{ activity.last_accessed.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                                <p class="mb-1">Progress: {{ activity.progress }}%</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">No recent activity</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Recommended Courses -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Recommended for You</h5>
+                </div>
+                <div class="card-body">
+                    {% if recommended_courses %}
+                        {% for course in recommended_courses %}
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-4">
+                                    {# <img src="{{ course.thumbnail_url }}" class="img-fluid rounded-start" alt="{{ course.title }}"> #}
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ course.title }}</h6>
+                                        <p class="card-text"><small class="text-muted">{{ course.students.all()|length }} students</small></p>
+                                        <a href="{{ url_for('course.view', course_id=course.id) }}" class="btn btn-sm btn-outline-primary">View Course</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">No recommendations available</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Course Categories -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Course Categories</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for category, count in categories %}
+                        <a href="{{ url_for('main.explore', category=category) }}" 
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            {{ category }}
+                            <span class="badge bg-primary rounded-pill">{{ count }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

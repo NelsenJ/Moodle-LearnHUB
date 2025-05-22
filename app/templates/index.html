@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section (Full Width) -->
+<section class="hero-section-full py-5">
+    <div class="container position-relative" style="z-index:2;">
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <h1 class="display-4 text-white mb-4">Learn Without Limits</h1>
+                <p class="lead text-white-50 mb-4">Start, switch, or advance your career with thousands of courses from expert instructors.</p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('main.explore') }}" class="btn btn-light btn-lg px-4">
+                        <i class="fas fa-graduation-cap me-2"></i>Explore Courses
+                    </a>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fas fa-user-plus me-2"></i>Join Now
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="hero-stats bg-white rounded-4 p-4 shadow-lg">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <h3 class="text-primary mb-0">100+</h3>
+                            <p class="text-muted mb-0">Courses</p>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-primary mb-0">50+</h3>
+                            <p class="text-muted mb-0">Instructors</p>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-primary mb-0">1000+</h3>
+                            <p class="text-muted mb-0">Students</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h5 class="card-title">Learn Anywhere</h5>
+                        <p class="card-text text-muted">Access your courses on any device, anytime, anywhere.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h5 class="card-title">Get Certified</h5>
+                        <p class="card-text text-muted">Earn certificates to showcase your skills and knowledge.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h5 class="card-title">Join Community</h5>
+                        <p class="card-text text-muted">Connect with other learners and share your experiences.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Courses Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 class="display-6" data-aos="fade-right">Popular Courses</h2>
+                <p class="text-muted" data-aos="fade-right" data-aos-delay="100">Explore our most popular courses and start learning today</p>
+            </div>
+            <div class="col-md-4 text-md-end" data-aos="fade-left">
+                <a href="{{ url_for('main.explore') }}" class="btn btn-primary">
+                    View All Courses <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+        <div class="row g-4">
+            {% for course in popular_courses %}
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                <div class="card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary">{{ course.category }}</span>
+                            <small class="text-muted">
+                                <i class="fas fa-clock"></i> {{ course.duration }} hours
+                            </small>
+                        </div>
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text text-muted">{{ course.description[:100] }}...</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <small class="text-muted">{{ course.teacher.username }}</small>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a href="{{ url_for('course.view', course_id=course.id) }}" class="btn btn-primary w-100">
+                            <i class="fas fa-graduation-cap me-2"></i>View Course
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Learning Timeline Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 class="display-6" data-aos="fade-right">Your Learning Journey</h2>
+                <p class="text-muted" data-aos="fade-right" data-aos-delay="100">Track your progress and see what's next in your learning path</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="timeline">
+                    <!-- Step 1 -->
+                    <div class="timeline-item" data-aos="fade-up">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4 class="mb-3">1. Choose Your Subject</h4>
+                            <p class="text-muted">Select from our wide range of academic subjects including Mathematics, Physics, Biology, Chemistry, and English.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4 class="mb-3">2. Start Learning</h4>
+                            <p class="text-muted">Begin with structured lessons designed by expert teachers. Each lesson includes video content and comprehensive materials.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4 class="mb-3">3. Practice & Quiz</h4>
+                            <p class="text-muted">Test your understanding with interactive quizzes and exercises after each lesson.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4 class="mb-3">4. Track Progress</h4>
+                            <p class="text-muted">Monitor your learning journey with detailed progress tracking and achievement badges.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="timeline-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <h4 class="mb-3">5. Get Certified</h4>
+                            <p class="text-muted">Complete courses and earn certificates to showcase your achievements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+html, body {
+    overflow-x: hidden;
+}
+
+.hero-section-full {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    background: linear-gradient(135deg, #0f2027 0%, #2c5364 50%, #14505c 100%);
+    padding: 5rem 0;
+    margin-bottom: 2rem;
+    overflow-x: hidden;
+}
+
+.hero-bg {
+    display: none; /* Remove the absolute positioned background */
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.hover-shadow {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: var(--bs-primary);
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+/* Timeline Styles */
+.timeline {
+    position: relative;
+    padding: 2rem 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background: #2c5364;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2c5364;
+    border: 4px solid #fff;
+    box-shadow: 0 0 0 2px #2c5364;
+}
+
+.timeline-content {
+    position: relative;
+    width: calc(50% - 30px);
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+    margin-left: auto;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+    margin-right: auto;
+}
+
+.timeline-content h4 {
+    color: #2c5364;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-marker {
+        left: 30px;
+    }
+    
+    .timeline-content {
+        width: calc(100% - 60px);
+        margin-left: 60px !important;
+    }
+}
+</style>
+{% endblock %} 

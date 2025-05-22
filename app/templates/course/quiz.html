@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h3 class="mb-0">{{ quiz.title }}</h3>
+                    <p class="text-muted mb-0">{{ quiz.description }}</p>
+                </div>
+                <div class="card-body">
+                    {% if last_attempt and last_attempt.completed_at %}
+                        <div class="alert {% if last_attempt.passed %}alert-success{% else %}alert-danger{% endif %}">
+                            <h4 class="alert-heading">
+                                {% if last_attempt.passed %}
+                                    <i class="fas fa-check-circle me-2"></i>Congratulations! (Passed)
+                                {% else %}
+                                    <i class="fas fa-times-circle me-2"></i>Not Passed
+                                {% endif %}
+                            </h4>
+                            <p>Your score: {{ "%.1f"|format(last_attempt.score) }}%</p>
+                            <p>Passing score: {{ quiz.passing_score }}%</p>
+                            {% if not last_attempt.passed %}
+                                <hr>
+                                <p class="mb-0">You can retake the quiz to improve your score.</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if not last_attempt or not last_attempt.completed_at %}
+                        <form method="POST" action="{{ url_for('course.submit_quiz', course_id=course.id, lesson_id=lesson.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
+                            {% for question in quiz.questions %}
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Question {{ loop.index }}</h5>
+                                        <p class="card-text">{{ question.question_text }}</p>
+                                        
+                                        {% if question.question_type == 'multiple_choice' %}
+                                            {% for option in question.options %}
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" 
+                                                           name="question_{{ question.id }}" 
+                                                           id="q{{ question.id }}_option{{ loop.index }}"
+                                                           value="{{ option }}" required>
+                                                    <label class="form-check-label" for="q{{ question.id }}_option{{ loop.index }}">
+                                                        {{ option }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+                                        {% elif question.question_type == 'true_false' %}
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" 
+                                                       name="question_{{ question.id }}" 
+                                                       id="q{{ question.id }}_true"
+                                                       value="True" required>
+                                                <label class="form-check-label" for="q{{ question.id }}_true">
+                                                    True
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" 
+                                                       name="question_{{ question.id }}" 
+                                                       id="q{{ question.id }}_false"
+                                                       value="False" required>
+                                                <label class="form-check-label" for="q{{ question.id }}_false">
+                                                    False
+                                                </label>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary">Submit Quiz</button>
+                        </form>
+                    {% else %}
+                        <a href="{{ url_for('course.view_lesson', course_id=course.id, lesson_id=lesson.id) }}" 
+                           class="btn btn-primary">Back to Lesson</a>
+                        <a href="{{ url_for('course.retake_quiz', course_id=course.id, lesson_id=lesson.id, quiz_id=quiz.id) }}" 
+                           class="btn btn-outline-primary">Retake Quiz</a>
+                        <a href="{{ url_for('course.review_quiz', course_id=course.id, lesson_id=lesson.id, quiz_id=quiz.id) }}" class="btn btn-success ms-2">Lihat Pembahasan</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

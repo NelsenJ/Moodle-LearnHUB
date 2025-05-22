@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Lesson Content -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('course.view', course_id=course.id) }}">{{ course.title }}</a></li>
+                            <li class="breadcrumb-item active">{{ lesson.title }}</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="card-title mb-4">{{ lesson.title }}</h1>
+                    
+                    {% if lesson.video_url %}
+                    <div class="mb-4">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="{{ lesson.video_url }}" 
+                                    title="{{ lesson.title }}" 
+                                    allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="lesson-content">
+                        {{ lesson.content|safe }}
+                    </div>
+
+                    {% if lesson.quizzes.count() > 0 %}
+                        <div class="mt-4">
+                            {% if lesson.quizzes.count() == 1 %}
+                                <a href="{{ url_for('course.take_quiz', course_id=course.id, lesson_id=lesson.id) }}?quiz_id={{ lesson.quizzes.first().id }}"
+                                   class="btn btn-primary">
+                                    <i class="fas fa-question-circle me-2"></i>Take Quiz
+                                </a>
+                            {% else %}
+                                <div class="input-group mb-3" style="max-width: 350px;">
+                                    <select class="form-select" id="quizSelect">
+                                        {% for quiz in lesson.quizzes %}
+                                            <option value="{{ quiz.id }}">{{ quiz.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button class="btn btn-primary" type="button" onclick="goToSelectedQuiz()">
+                                        <i class="fas fa-question-circle me-2"></i>Take Quiz
+                                    </button>
+                                </div>
+                                <script>
+                                function goToSelectedQuiz() {
+                                    var quizId = document.getElementById('quizSelect').value;
+                                    var url = "{{ url_for('course.take_quiz', course_id=course.id, lesson_id=lesson.id) }}?quiz_id=" + quizId;
+                                    window.location.href = url;
+                                }
+                                </script>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between">
+                {% set prev_lesson = course.lessons.filter(Lesson.order < lesson.order).order_by(Lesson.order.desc()).first() %}
+                {% set next_lesson = course.lessons.filter(Lesson.order > lesson.order).order_by(Lesson.order).first() %}
+                
+                {% if prev_lesson %}
+                <a href="{{ url_for('course.view_lesson', course_id=course.id, lesson_id=prev_lesson.id) }}" 
+                   class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Previous Lesson
+                </a>
+                {% else %}
+                <div></div>
+                {% endif %}
+
+                {% if next_lesson %}
+                <a href="{{ url_for('course.view_lesson', course_id=course.id, lesson_id=next_lesson.id) }}" 
+                   class="btn btn-primary">
+                    Next Lesson<i class="fas fa-arrow-right ms-2"></i>
+                </a>
+                {% else %}
+                <div></div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Course Content</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for l in course.lessons.order_by(Lesson.order) %}
+                    <a href="{{ url_for('course.view_lesson', course_id=course.id, lesson_id=l.id) }}" 
+                       class="list-group-item list-group-item-action {% if l.id == lesson.id %}active{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ l.title }}</h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i> {{ l.duration }} minutes
+                                </small>
+                            </div>
+                            {% if l.id == lesson.id %}
+                            <i class="fas fa-play-circle"></i>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
