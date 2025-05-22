@@ -2,6 +2,10 @@
 
 **LearnHub** is a modern web-based learning platform built with **Flask** using the **MVC (Model-View-Controller)** architecture. Inspired by **Khan Academy**, it focuses on user experience and a clean, responsive design to support students, teachers, and administrators.
 
+## Readme khusus Sir Sepri
+
+> 🇮🇩 readme untuk sir sepri [Click here for README_SirSepri.md](./README_SirSepri.md)
+
 ## 🌐 Live Demo & Repository
 
 * **Live Site**: [http://seiryu.pythonanywhere.com](http://seiryu.pythonanywhere.com)
