@@ -14,7 +14,7 @@
 
 ### Untuk Guru:
 - Dashboard khusus guru
-- Manajemen kursus dan materi
+- Manajemen kursus, materi, dan kuis
 - Statistik dan analisis pembelajaran
 
 ### Untuk Admin:
