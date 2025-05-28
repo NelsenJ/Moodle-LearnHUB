@@ -334,10 +334,93 @@ def create():
 def manage_course(course_id):
     course = Course.query.get_or_404(course_id)
     
+    # Check if user is the teacher of this course
+    if not current_user.is_teacher or course.teacher_id != current_user.id:
+        flash('You do not have permission to manage this course.', 'error')
+        return redirect(url_for('course.view', course_id=course.id))
+    
     if request.method == 'POST':
         action = request.form.get('action')
+        print(f"DEBUG: Received action: {action}")  # Debug print
         
-        if action == 'manage_quiz':
+        if action == 'add_lesson':
+            try:
+                # Debug prints
+                print("DEBUG: Processing add_lesson action")
+                print(f"DEBUG: Form data: {request.form}")
+                
+                # Validate required fields
+                title = request.form.get('title', '').strip()
+                content = request.form.get('content', '').strip()
+                order = request.form.get('order', type=int)
+                duration = request.form.get('duration', type=int)
+                
+                print(f"DEBUG: Parsed values - title: {title}, content length: {len(content)}, order: {order}, duration: {duration}")
+                
+                if not title:
+                    flash('Lesson title is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                if not content:
+                    flash('Lesson content is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                if order is None or order < 1:
+                    flash('Valid lesson order is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                    
+                if duration is None or duration < 1:
+                    flash('Valid lesson duration is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                # Create new lesson
+                lesson = Lesson(
+                    title=title,
+                    content=content,
+                    video_url=request.form.get('video_url', '').strip(),
+                    order=order,
+                    duration=duration,
+                    course_id=course_id
+                )
+                db.session.add(lesson)
+                db.session.commit()
+                flash('Lesson added successfully!', 'success')
+                return redirect(url_for('course.manage_course', course_id=course_id))
+                
+            except Exception as e:
+                import traceback
+                print(f"DEBUG: Exception in add_lesson: {str(e)}")
+                print("DEBUG: Traceback:")
+                traceback.print_exc()
+                db.session.rollback()
+                flash('Error adding lesson: ' + str(e), 'error')
+                return redirect(url_for('course.manage_course', course_id=course_id))
+                
+        elif action == 'edit_lesson':
+            try:
+                lesson_id = request.form.get('lesson_id', type=int)
+                lesson = Lesson.query.get_or_404(lesson_id)
+                if lesson.course_id != course_id:
+                    flash('Invalid lesson.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                # Update fields
+                lesson.title = request.form.get('title', '').strip()
+                lesson.content = request.form.get('content', '').strip()
+                lesson.video_url = request.form.get('video_url', '').strip()
+                lesson.order = int(request.form.get('order')) if request.form.get('order') else lesson.order
+                lesson.duration = int(request.form.get('duration')) if request.form.get('duration') else lesson.duration
+                
+                db.session.commit()
+                flash('Lesson updated successfully!', 'success')
+                return redirect(url_for('course.manage_course', course_id=course_id))
+                
+            except Exception as e:
+                db.session.rollback()
+                flash('Error updating lesson: ' + str(e), 'error')
+                return redirect(url_for('course.manage_course', course_id=course_id))
+        
+        elif action == 'manage_quiz':
             try:
                 lesson_id = request.form.get('lesson_id', type=int)
                 quiz_action = request.form.get('quiz_action', 'add')
