@@ -8,7 +8,7 @@
 
 ## 🌐 Live Demo & Repository
 
-* **Live Site**: [http://NelsenJ.pythonanywhere.com](https://nelsenj.pythonanywhere.com)
+* **Live Site**: [http://nelsenj.pythonanywhere.com](https://nelsenj.pythonanywhere.com)
 * **Source Code**: [GitHub Repository](https://github.com/NelsenJ/Moodle-LearnHUB)
 
 ## 🌟 Key Features
