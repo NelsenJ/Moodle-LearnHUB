@@ -30,7 +30,7 @@
 
 ## 🌐 Demo Online
 
-🔗 [http://seiryu.pythonanywhere.com](http://seiryu.pythonanywhere.com)
+🔗 [http://nelsenj.pythonanywhere.com](https://nelsenj.pythonanywhere.com)
 
 ### 👥 Akun Demo
 
