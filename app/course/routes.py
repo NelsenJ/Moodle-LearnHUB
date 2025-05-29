@@ -343,7 +343,52 @@ def manage_course(course_id):
         action = request.form.get('action')
         print(f"DEBUG: Received action: {action}")  # Debug print
         
-        if action == 'add_lesson':
+        if action == 'edit_course':
+            try:
+                # Validate required fields
+                title = request.form.get('title', '').strip()
+                description = request.form.get('description', '').strip()
+                category = request.form.get('category', '').strip()
+                level = request.form.get('level', '').strip()
+                duration = request.form.get('duration', type=int)
+
+                if not title:
+                    flash('Course title is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                if not description:
+                    flash('Course description is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                if not category:
+                    flash('Course category is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                if not level or level not in ['beginner', 'intermediate', 'advanced']:
+                    flash('Valid course level is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+                
+                if duration is None or duration < 1:
+                    flash('Valid course duration is required.', 'error')
+                    return redirect(url_for('course.manage_course', course_id=course_id))
+
+                # Update course details
+                course.title = title
+                course.description = description
+                course.category = category
+                course.level = level
+                course.duration = duration
+
+                db.session.commit()
+                flash('Course updated successfully!', 'success')
+                return redirect(url_for('course.manage_course', course_id=course_id))
+                
+            except Exception as e:
+                db.session.rollback()
+                flash('Error updating course: ' + str(e), 'error')
+                return redirect(url_for('course.manage_course', course_id=course_id))
+        
+        elif action == 'add_lesson':
             try:
                 # Debug prints
                 print("DEBUG: Processing add_lesson action")
