@@ -1,10 +1,10 @@
-# 📘 LearnHub - Platform Pembelajaran Modern
+# LearnHub - Platform Pembelajaran Modern
 
-## 🧠 Tentang Proyek
+##  Tentang Proyek
 
 **LearnHub** adalah platform pembelajaran online berbasis web yang dibangun menggunakan **Flask** dengan arsitektur **MVC**. Terinspirasi dari **Khan Academy**, platform ini dirancang dengan tampilan modern dan fitur lengkap untuk siswa, guru, dan admin.
 
-## 🎓 Fitur Utama
+## Fitur Utama
 
 ### Untuk Siswa:
 - Login & Register yang aman
@@ -21,30 +21,30 @@
 - Kelola seluruh data pengguna dan konten
 - Akses penuh terhadap platform
 
-## 🧱 Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 - **Backend**: Flask (Python)
 - **Database**: SQLite / MySQL
 - **Frontend**: Bootstrap 5, AOS (animasi), Font Awesome
 - **Hosting**: PythonAnywhere
 
-## 🌐 Demo Online
+## Demo Online
 
 🔗 [http://nelsenj.pythonanywhere.com](https://nelsenj.pythonanywhere.com)
 
-### 👥 Akun Demo
+### Akun Demo
 
-- 👨‍🎓 Siswa:  
+- Siswa:  
   - Username: `student1`  
   - Password: `password`
-- 👨‍🏫 Guru:  
+- Guru:  
   - Username: `teacher1`  
   - Password: `password`
-- 👨‍💼 Admin:  
+- Admin:  
   - Username: `admin2`  
   - Password: `sirsepri`
 
-## 🛠️ Cara Menjalankan Secara Lokal
+## Cara Menjalankan Secara Lokal
 
 1. **Clone repository**
 
