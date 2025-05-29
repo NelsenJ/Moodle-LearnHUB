@@ -67,7 +67,7 @@ cd Moodle-LearnHUB
 ```bash
 # Windows
 python -m venv venv
-venv\Scripts\activate
+source venv/Scripts/activate
 
 # Linux/Mac
 python -m venv venv
